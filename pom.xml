@@ -14,4 +14,27 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <!-- Hibernate Core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.4.4.Final</version> <!-- Используйте актуальную версию -->
+        </dependency>
+
+        <!-- PostgreSQL JDBC Driver -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.7.3</version> <!-- Используйте актуальную версию -->
+    </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version> <!-- Используйте актуальную версию, проверьте на сайте Lombok -->
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
 </project>

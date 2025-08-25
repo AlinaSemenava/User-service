@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest # Используем официальный образ PostgreSQL
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Сохраняем данные вне контейнера
+    ports:
+      - "5432:5432" # Пробрасываем порт PostgreSQL на хост
+
+  app:
+    build: . # Собираем образ из текущего каталога (где находится Dockerfile)
+    ports:
+      - "8080:8080" # Пробрасываем порт приложения на хост
+    depends_on:
+      - db # Убедимся, что база данных запущена до старта приложения
+    environment:
+      # Передаем параметры подключения к базе данных в приложение
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+
+volumes:
+  postgres_data:
