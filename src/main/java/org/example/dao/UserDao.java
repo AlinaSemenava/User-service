@@ -4,21 +4,31 @@ import org.example.model.*;
 import org.hibernate.*;
 import org.hibernate.cfg.*;
 
-import java.util.*;
-
 public class UserDao {
 
-    public static void create(String name){
-        SessionFactory sessionFactory = null;
-        Session session = null;
+    private SessionFactory sessionFactory;
+    private Session session;
+
+    public UserDao() {
+        var sessionFactory = new Configuration()
+                .configure("hibernate.cfg.xml") // Путь к файлу конфигурации
+                .buildSessionFactory();
+
+        var session = sessionFactory.openSession();
+        new UserDao(sessionFactory,session);
+
+    }
+
+    public UserDao(SessionFactory sessionFactory, Session session) {
+        this.sessionFactory = sessionFactory;
+        this.session = session;
+    }
+
+    public void create(String name){
 
         try {
             // Конфигурация Hibernate
-            sessionFactory = new Configuration()
-                    .configure("hibernate.cfg.xml") // Путь к файлу конфигурации
-                    .buildSessionFactory();
 
-            session = sessionFactory.openSession();
             session.beginTransaction();
 
             // Пример создания объекта
@@ -44,14 +54,11 @@ public class UserDao {
         }
     }
 
-    public static User read(String name){
+    public User read(String name){
 
         Transaction tx = null;
-        SessionFactory sessionFactory = new Configuration()
-                .configure("hibernate.cfg.xml") // Путь к файлу конфигурации
-                .buildSessionFactory();
 
-        try (Session session = sessionFactory.openSession()) {
+        try {
             tx = session.beginTransaction();
             String hql = "from User u where u.name = :name";
             User user = session.createQuery(hql, User.class)
@@ -68,12 +75,10 @@ public class UserDao {
         }
     }
 
-    public static int update(String name, String email){
+    public int update(String name, String email){
         Transaction tx = null;
-        SessionFactory sessionFactory = new Configuration()
-                .configure("hibernate.cfg.xml") // Путь к файлу конфигурации
-                .buildSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
+
+        try {
             tx = session.beginTransaction();
             String hqlUpdate = "update User u set u.email = :email where u.name = :name";
             int updated = session.createQuery(hqlUpdate)
@@ -90,12 +95,10 @@ public class UserDao {
         }
     }
 
-    public static boolean delete(String name){
+    public boolean delete(String name){
         Transaction tx = null;
-        SessionFactory sessionFactory = new Configuration()
-                .configure("hibernate.cfg.xml") // Путь к файлу конфигурации
-                .buildSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
+
+        try {
             tx = session.beginTransaction();
             String hqlSelect = "from User u where u.name = :name";
             User user = session.createQuery(hqlSelect, User.class)
